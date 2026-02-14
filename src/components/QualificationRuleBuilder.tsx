@@ -118,6 +118,7 @@ const QualificationRuleBuilder: React.FC<QualificationRuleBuilderProps> = ({
                                 onChange={e => updateRule(rule.id, 'operator', e.target.value)}
                             >
                                 <option value="equals">Igual a</option>
+                                <option value="notEquals">Diferente de</option>
                                 <option value="contains">Contém</option>
                                 <option value="greaterThan">Maior que</option>
                                 <option value="lessThan">Menor que</option>

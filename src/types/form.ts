@@ -20,7 +20,7 @@ export interface FormQuestion {
 export interface QualificationRule {
   id: string;
   questionId: string;
-  operator: 'equals' | 'contains' | 'greaterThan' | 'lessThan';
+  operator: 'equals' | 'notEquals' | 'contains' | 'greaterThan' | 'lessThan';
   value: string;
 }
 

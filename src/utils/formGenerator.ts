@@ -276,6 +276,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   window.selectOption = function(qid, val, el){
     // Update UI
     var group = document.getElementById('group-'+qid);
+    if(group.classList.contains('locked')) return; // Prevent double clicks
+    group.classList.add('locked'); // Lock selection
+    
     group.querySelectorAll('.radio-card').forEach(function(c){ c.classList.remove('selected'); });
     el.classList.add('selected');
     
@@ -291,7 +294,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
       if(step === ${sortedQuestions.length}){
         showReview();
       } else {
-        setTimeout(function(){ showStep(step + 1); }, 300);
+        // Safety delay to prevent skips and ensure UI feedback
+        setTimeout(function(){ 
+          if(step < ${sortedQuestions.length}) showStep(step + 1); 
+        }, 450);
       }
     }
   };
@@ -334,6 +340,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
         
         switch(rule.operator){
             case 'equals': return answer === rule.value;
+            case 'notEquals': return answer !== rule.value;
             case 'contains': return answer.includes(rule.value);
             case 'greaterThan': return parseFloat(answer.replace(/[^0-9]/g,'')) > parseFloat(rule.value.replace(/[^0-9]/g,''));
             case 'lessThan': return parseFloat(answer.replace(/[^0-9]/g,'')) < parseFloat(rule.value.replace(/[^0-9]/g,''));

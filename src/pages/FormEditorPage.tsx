@@ -23,7 +23,7 @@ const FormEditorPage = () => {
   const [activeTab, setActiveTab] = useState('basic');
   const [newCity, setNewCity] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [errors, setErrors] = useState<Record<string, string>>({});
+
   const [isDeploying, setIsDeploying] = useState(false);
   const [questions, setQuestions] = useState<FormQuestion[]>(defaultQuestions);
   const [criteria, setCriteria] = useState<QualificationCriteria>({ rules: [], logic: 'AND' });
@@ -260,6 +260,39 @@ const FormEditorPage = () => {
       toast.error('Erro inesperado ao fazer deploy', { id: 'deploy' });
     } finally {
       setIsDeploying(false);
+    }
+  };
+
+  const addQuestion = () => {
+    const newQ: FormQuestion = {
+      id: crypto.randomUUID(),
+      type: 'text',
+      label: 'Nova Pergunta',
+      required: false,
+      order: questions.length,
+      isFixed: false
+    };
+    setQuestions([...questions, newQ]);
+  };
+
+  const updateQuestion = (updated: FormQuestion) => {
+    setQuestions(questions.map(q => q.id === updated.id ? updated : q));
+  };
+
+  const removeQuestion = (id: string) => {
+    setQuestions(questions.filter(q => q.id !== id));
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setQuestions((items) => {
+        const oldIndex = items.findIndex((q) => q.id === active.id);
+        const newIndex = items.findIndex((q) => q.id === over.id);
+        const newItems = arrayMove(items, oldIndex, newIndex);
+        // Update order property for all items
+        return newItems.map((q, index) => ({ ...q, order: index }));
+      });
     }
   };
 
