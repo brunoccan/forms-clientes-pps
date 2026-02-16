@@ -16,6 +16,7 @@ export interface VercelDeploymentRequest {
     projectSettings?: {
         framework: null;
     };
+    target?: 'production' | 'preview';
 }
 
 export class VercelService {
@@ -26,12 +27,14 @@ export class VercelService {
      * @param token - Vercel API token
      * @param projectName - Name for the project (slug)
      * @param htmlContent - HTML content to deploy
+     * @param production - whether to deploy to production (default: false)
      * @returns Deployment response with URL
      */
     static async createDeployment(
         token: string,
         projectName: string,
-        htmlContent: string
+        htmlContent: string,
+        production: boolean = false
     ): Promise<VercelDeploymentResponse> {
         if (!token) {
             throw new Error('Token da Vercel não configurado');
@@ -49,6 +52,7 @@ export class VercelService {
             projectSettings: {
                 framework: null,
             },
+            target: production ? 'production' : undefined
         };
 
         try {

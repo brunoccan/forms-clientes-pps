@@ -43,7 +43,8 @@ export async function deployFormToVercel(
         const deployment = await VercelService.createDeployment(
             form.vercelToken,
             `form-${form.slug}`,
-            html
+            html,
+            true // Force production deployment
         );
 
         // Return success with deployment info
