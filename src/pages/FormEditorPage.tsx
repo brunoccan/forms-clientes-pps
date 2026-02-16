@@ -130,13 +130,26 @@ const FormEditorPage = () => {
     const now = new Date().toISOString();
 
     if (isNew) {
-      const newForm: LeadForm = { ...form, id: crypto.randomUUID(), createdAt: now, updatedAt: now };
+      const newForm: LeadForm = {
+        ...form,
+        questions,
+        qualificationCriteria: criteria,
+        id: crypto.randomUUID(),
+        createdAt: now,
+        updatedAt: now
+      };
       addForm(newForm);
       toast.success('Formulário criado!');
       navigate('/dashboard');
     } else {
       const existing = getForm(id!)!;
-      const updatedFormData = { ...existing, ...form, updatedAt: now };
+      const updatedFormData = {
+        ...existing,
+        ...form,
+        questions,
+        qualificationCriteria: criteria,
+        updatedAt: now
+      };
       updateForm(updatedFormData);
       toast.success('Formulário atualizado!');
 
